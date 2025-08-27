@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @Table
 @Data
 @EntityListeners(AuditingEntityListener.class)
-public class comment {
+public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -30,9 +30,9 @@ public class comment {
 
     @ManyToOne
     @JoinColumn(name = "user_id")
-    private user user;
+    private BlogUser user;
 
     @ManyToOne
     @JoinColumn(name = "post_id")
-    private post post;
+    private Post post;
 }

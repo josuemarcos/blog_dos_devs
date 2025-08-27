@@ -11,9 +11,9 @@ import java.util.List;
 @Table
 @Data
 @EntityListeners(AuditingEntityListener.class)
-public class post {
+public class Post {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false, length = 60)
@@ -32,8 +32,8 @@ public class post {
 
     @ManyToOne
     @JoinColumn(name = "user_id")
-    private user user;
+    private BlogUser user;
 
     @OneToMany(mappedBy = "post")
-    private List<comment> comments;
+    private List<Comment> comments;
 }
