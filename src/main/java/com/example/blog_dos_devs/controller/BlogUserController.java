@@ -5,12 +5,11 @@ import com.example.blog_dos_devs.model.BlogUser;
 import com.example.blog_dos_devs.service.BlogUserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
+import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/blog-users")
@@ -26,5 +25,36 @@ public class BlogUserController implements GenericController {
         URI location = generateHeaderLocation(blogUserEntity.getId());
         return ResponseEntity.created(location).build();
     }
+
+    @GetMapping
+    public ResponseEntity<List<BlogUserDTO>> findAll() {
+        List<BlogUser> blogUsersEntity = blogUserService.getAllBlogUsers();
+        List<BlogUserDTO> blogUsersDTO = blogUsersEntity
+                .stream()
+                .map(blogUserMapper::toDTO)
+                .toList();
+        return ResponseEntity.ok(blogUsersDTO);
+    }
+
+    @GetMapping("{id}")
+    public ResponseEntity<BlogUserDTO> findById(@PathVariable Long id) {
+        return blogUserService.getBlogUserById(id)
+                .map(
+                        blogUser -> {
+                            BlogUserDTO blogUserDTO = blogUserMapper.toDTO(blogUser);
+                            return ResponseEntity.ok(blogUserDTO);
+                        }
+                ).orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+
+//    @PutMapping
+//    public ResponseEntity<Void> update(@RequestBody BlogUserDTO dto) {
+//        BlogUser blogUserEntity = blogUserMapper.toEntity(dto);
+//        blogUserService.updateBlogUser(blogUserEntity);
+//
+//    }
+
+
 
 }
