@@ -47,13 +47,21 @@ public class BlogUserController implements GenericController {
                 ).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
+    @PutMapping("{id}")
+    public ResponseEntity<Object> update(@RequestBody BlogUserDTO dto, @PathVariable Long id) {
+        return blogUserService.getBlogUserById(id)
+                .map(
+                        blogUser -> {
+                            blogUser.setName(dto.name());
+                            blogUser.setEmail(dto.email());
+                            blogUserService.saveBlogUser(blogUser);
+                            return  ResponseEntity.ok().build();
+                        }
+                ).orElseGet(() -> ResponseEntity.notFound().build());
+    }
 
-//    @PutMapping
-//    public ResponseEntity<Void> update(@RequestBody BlogUserDTO dto) {
-//        BlogUser blogUserEntity = blogUserMapper.toEntity(dto);
-//        blogUserService.updateBlogUser(blogUserEntity);
-//
-//    }
+   // @DeleteMapping("{id}")
+
 
 
 
